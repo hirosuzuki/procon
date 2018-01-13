@@ -24,9 +24,9 @@ def cmp(x, y):
     resp = input()
     return 1 if resp == ">" else -1
 
-def sort(x):
+def sort(xs):
     result = []
-    for c in cs:
+    for c in xs:
         l = 0
         r = len(result)
         while l < r:
