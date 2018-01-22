@@ -1,47 +1,41 @@
-def calc0(K, xyc):
-    rmax = 0
-    for i in range(K * 2):
-        for j in range(K * 2):
-            rcount = 0
-            for x, y, c in xyc:
-                rcount += ((x + j) // K + (y + i) // K) % 2 == c
-            rmax = max(rmax, rcount)
-    return rmax
-
-def calc1(K, xyc):
-    rmax = 0
-    for i in range(K * 2):
-        xs = [(x + c * K + (y + i) // K * K) % (2 * K) for x, y, c in xyc]
-        for j in range(K * 2):
-            rcount = 0
-            for x in xs:
-                rcount += ((x + j) // K)  % 2 == 1
-            rmax = max(rmax, rcount)
-    return rmax
+from collections import defaultdict
 
 def calc(K, xyc):
+    K2 = K * 2
+    N = len(xyc)
+
+    m = defaultdict(int)
+    for x, y, c in xyc:
+        y += c * K
+        x1, y1 = x % K2, y % K2
+        x2, y2 = x1 + K, y1 + K
+        m[x1, y1] += 1
+        m[x2, y2] += 1
+        m[x2, y1] -= 1
+        m[x1, y2] -= 1
+        x1, y1 = (x + K) % K2, (y + K) % K2
+        x2, y2 = x1 + K, y1 + K
+        m[x1, y1] += 1
+        m[x2, y2] += 1
+        m[x2, y1] -= 1
+        m[x1, y2] -= 1
+
+    ms = [[0] * (K2 + 1) for i in range(K2 + 1)]
+    for y in range(0, K2):
+        ms0 = ms[y]
+        ms1 = ms[y - 1]
+        for x in range(0, K2):
+            ms0[x] = m[x, y] + ms0[x-1] + ms1[x] - ms1[x-1]
+    
     rmax = 0
-    for i in range(K):
-        ts = [0 for x in range(K * 2)]
-        for x, y, c in xyc:
-            a = (x + c * K + (y + i) // K * K) % (2 * K)
-            ts[a] += 1
-        rcount = sum(ts[0:K])
-        for j in range(K):
-            rcount += -ts[j] + ts[j+K]
+    for y in range(K, K2):
+        for x in range(K, K2):
+            rcount = ms[y][x]
             rmax = max(rmax, rcount, N - rcount)
+
     return rmax
 
-#import random
-#N = 10000
-#K = 20
-#xyc = [(random.randint(0, 10000), random.randint(0, 10000), random.randint(0, 10000) % 2) for i in range(N)]
-
-N, K = [int(e) for e in input().split()]
-xyc = [input().split() for i in range(N)]
-xyc = [(int(x), int(y), c == "W") for x, y, c in xyc]
-
-#print(calc0(K, xyc))
-#print(calc1(K, xyc))
-print(calc(K, xyc))
-
+if __name__ == '__main__':
+    N, K = [int(e) for e in input().split()]
+    xyc = [(int(x), int(y), c == "W") for x, y, c in [input().split() for i in range(N)]]
+    print(calc(K, xyc))
