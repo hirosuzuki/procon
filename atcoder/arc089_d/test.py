@@ -86,7 +86,7 @@ def calc3(K, xyc):
 
 import random
 N = 200
-K = 10
+K = 5
 xyc = [(random.randint(0, 10000), random.randint(0, 10000), random.randint(0, 10000) % 2) for i in range(N)]
 
 print(calc(K, xyc))

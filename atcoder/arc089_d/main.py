@@ -1,37 +1,28 @@
-from collections import defaultdict
-
 def calc(K, xyc):
     K2 = K * 2
     N = len(xyc)
 
-    m = defaultdict(int)
+    p = [[0] * K2 for i in range(K2)]
     for x, y, c in xyc:
         y += c * K
-        x1, y1 = x % K2, y % K2
-        x2, y2 = x1 + K, y1 + K
-        m[x1, y1] += 1
-        m[x2, y2] += 1
-        m[x2, y1] -= 1
-        m[x1, y2] -= 1
-        x1, y1 = (x + K) % K2, (y + K) % K2
-        x2, y2 = x1 + K, y1 + K
-        m[x1, y1] += 1
-        m[x2, y2] += 1
-        m[x2, y1] -= 1
-        m[x1, y2] -= 1
+        p[x % K2][y % K2] += 1
+        p[(x + K) % K2][(y + K) % K2] += 1
 
-    ms = [[0] * (K2 + 1) for i in range(K2 + 1)]
-    for y in range(0, K2):
-        ms0 = ms[y]
-        ms1 = ms[y - 1]
-        for x in range(0, K2):
-            ms0[x] = m[x, y] + ms0[x-1] + ms1[x] - ms1[x-1]
-    
-    rmax = 0
-    for y in range(K, K2):
-        for x in range(K, K2):
-            rcount = ms[y][x]
+    def calcsum(xs):
+        r = sum(xs[:K])
+        yield r
+        for a, b in zip(xs[:K], xs[K:]):
+            r += -a + b
+            yield r
+
+    pksum = [list(calcsum(xs)) for xs in p]
+
+    rmax = N / 2
+    for y in range(K):
+        rcount = sum(row[y] for row in pksum[:K])
+        for x in range(K):
             rmax = max(rmax, rcount, N - rcount)
+            rcount += -pksum[x][y] + pksum[x + K][y]
 
     return rmax
 
