@@ -20,8 +20,8 @@ lrd = [[1,2,100],[3,4,100],[2,3,100],[1,4,300]]
 
 import random
 N = 100000
-M = 200000
-X = [random.randint(0, 1000) for i in range(N + 1)]
+M = N * 2
+X = [random.randint(0, N) for i in range(N + 1)]
 lrd = []
 for i in range(N):
     while 1:
@@ -32,5 +32,4 @@ for i in range(N):
     d = X[r] - X[l]
     lrd.append((l, r, d))
 
-#print(X)
 print(solve(N, M, lrd))
