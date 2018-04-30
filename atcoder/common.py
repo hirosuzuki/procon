@@ -16,6 +16,27 @@ def primes(n):
 p = list(primes(100))
 print(len(p))
 
+M = 10**9 + 7
+L = 200000
+
+Fm = {}
+inverseFm = {}
+x = 1
+for i in range(L):
+    Fm[i] = x
+    x = x * (i + 1) % M
+
+def inverseFm(x, cache={}):
+    if x in cache:
+        return cache[x]
+    result = pow(Fm[x], M - 2, M)
+    cache[x] = result
+    return result
+
+def C(n, r):
+    result = Fm[n] * inverseFm(r) * inverseFm(n - r) % M
+    return result
+    
 def solve():
     pass
 
