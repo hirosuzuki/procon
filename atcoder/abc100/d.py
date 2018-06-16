@@ -1,13 +1,6 @@
 N, M = [int(_) for _ in input().split()]
 xyz = [tuple(int(_) for _ in input().split()) for _ in range(N)]
 
-#import itertools
-#l = list(range(N))
-#result = 0
-#for xs in itertools.combinations(l, M):
-#    r = abs(sum(xyz[x][0] for x in xs)) + abs(sum(xyz[x][1] for x in xs)) + abs(sum(xyz[x][2] for x in xs))
-#    result = max(result, r)
-
 signs = [
     (+1, +1, +1),
     (+1, +1, -1),
