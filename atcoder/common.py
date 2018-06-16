@@ -44,3 +44,29 @@ if __name__ == '__main__':
     A = int(input())
     N, M = [int(_) for _ in input().split()]
     solve()
+
+class UnionFind():
+    # https://qiita.com/hukuhuku11111a1/items/1bbf67d90630552eb512
+    def __init__(self, size):
+        self.table = [-1] * size
+
+    def find(self, x):
+        while 1:
+            i = self.table[x]
+            if i < 0:
+                return x
+            x = i
+
+    def union(self,x,y):
+        s1 = self.find(x)
+        s2 = self.find(y)
+        if s1 == s2:
+            return
+        d = self.table[s1] - self.table[s2]
+        if d < 0:
+            self.table[s2] = s1
+        elif d > 0:
+            self.table[s1] = s2
+        else:
+            self.table[s1] += -1
+            self.table[s2] = s1
