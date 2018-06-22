@@ -5,6 +5,9 @@ def gcd(a, b):
         a, b = b, a % b
     return a
 
+def lcm(a, b):
+    return a * b // gcd(a, b)
+
 def primes(n):
     from math import sqrt
     p = [1] * (n + 1)
@@ -44,6 +47,24 @@ if __name__ == '__main__':
     A = int(input())
     N, M = [int(_) for _ in input().split()]
     solve()
+
+def Dijkstra(s, V, E):
+    # https://ja.wikipedia.org/wiki/%E3%83%80%E3%82%A4%E3%82%AF%E3%82%B9%E3%83%88%E3%83%A9%E6%B3%95
+    d = defaultdict(lambda:10**20)
+    prev = defaultdict(lambda:None)
+    d[s] = 0
+    Q = []
+    for v in V:
+        heappush(Q, (d[v], v))
+    while Q:
+        x, u = heappop(Q)
+        for v, y in E[u].items():
+            alt = d[u] + y
+            if d[v] > alt:
+                d[v] = alt
+                prev[v] = u
+                heappush(Q, (alt, v))
+    return d, prev
 
 class UnionFind():
     # https://qiita.com/hukuhuku11111a1/items/1bbf67d90630552eb512
