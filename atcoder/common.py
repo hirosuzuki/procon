@@ -91,3 +91,16 @@ class UnionFind():
         else:
             self.table[s1] += -1
             self.table[s2] = s1
+
+# http://sucrose.hatenablog.com/entry/2017/03/20/235434
+def extended_euclid(a, b):
+    assert a > 0
+    assert b > 0
+    
+    x1, y1, m = 1, 0, a
+    x2, y2, n = 0, 1, b
+    while m % n != 0:
+        q = m / n
+        x1, y1, m, x2, y2, n = x2, y2, n, x1 - q * x2, y1 - q * y2, m - q * n
+    
+    return (x2, y2, n)
