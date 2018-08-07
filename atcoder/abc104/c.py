@@ -1,45 +1,36 @@
 D, G = [int(_) for _ in input().split()]
-PC = [[int(_) for _ in input().split()] for i in range(D)]
-P = [p for p, c in PC]
-C = [c for p, c in PC]
+PC = [tuple(int(_) for _ in input().split()) for i in range(D)]
 
-from heapq import *
+from itertools import product
 
-h = []
+def calc(D, G, PC, es):
+    r = 0
+    k = None
+    result = 0
+    for i, e, pc in zip(range(D), es, PC):
+        if e:
+            r += (i+1) * 100 * pc[0] + pc[1]
+            result += pc[0]
+        else:
+            k = i
+    if r >= G:
+        return result, r
+    if not k is None:
+        d = (k+1)*100
+        p = PC[k][0]
+        if r + d * (p - 1) >= G:
+            n = (G - r + d - 1) // d
+            result += n
+            r += n * d
+            return result, r
+    return None, None
 
-heappush(h, (0, 0, (0,)*D))
+result = 10**20
 
-result = 0
-
-ef = {}
-
-while h:
-    t, score, pat = heappop(h)
-    # print(t, score, pat)
-    if score >= G:
-        result = t
-        break
-
-    def add(i, pat, d):
-        pat1 = list(pat)
-        if pat1[i] +d <= P[i]:
-            pat1[i] += d
-            pat1 = tuple(pat1)
-            if not pat1 in ef:
-                t1 = t + d
-                score1 = score + (i+1)*100*d
-                if pat1[i] == P[i]:
-                    score1 += C[i]
-                ef[pat1] = t
-                heappush(h, (t1, score1, pat1))
-
-    for i in range(D-1, -1, -1):
-        if pat[i] < P[i]:
-            add(i, pat, 1)
-            break
-
-    for i in range(D):
-        if pat[i] + 1 < P[i]:
-            add(i, pat, P[i] - pat[i])
+for es in product((0, 1), repeat=D):
+    r, score = calc(D, G, PC, es)
+    #print(D, G, PC, es, r, score)
+    if not r is None:
+        result = min(result, r)
 
 print(result)
