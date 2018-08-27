@@ -104,3 +104,21 @@ def extended_euclid(a, b):
         x1, y1, m, x2, y2, n = x2, y2, n, x1 - q * x2, y1 - q * y2, m - q * n
     
     return (x2, y2, n)
+
+class BIT:
+
+    def __init__(self, size):
+        self.size = size
+        self.xs = [0] * (size + 1)
+
+    def sum(self, n):
+        r = 0
+        while n:
+            r += self.xs[n]
+            n &= n - 1
+        return r
+
+    def add(self, n, x):
+        while n <= self.size:
+            self.xs[n] += x
+            n += n & -n
