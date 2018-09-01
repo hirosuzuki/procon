@@ -1,47 +1,22 @@
 L = int(input())
 
-x = L
+xs = []
 
-xs1 = []
-xs2 = []
-xs3 = []
-
-for i in range(19):
-    c = 18 - i
-    xs1.append((i + 1, i + 2, 0))
-
-#print("x=", x)
-
-b = 0
-
-for i in range(20):
-    n = 19 - i
-    r = 2 ** n
-    if x >= r:
-        m = n
-        x -= r
-        b += r
-        #print(n, r, x, b)
+for m in range(21):
+    if (2 << m) > L:
         break
+    xs.append((m+1, m+2, 0))
+    xs.append((m+1, m+2, 1 << m))
 
-#print("m=", m)
-#print("i=", i)
+b = 1 << m
 
-for i in range(i + 1, 20):
-    n = 19 - i
-    r = 2 ** n
-    if x >= r:
-        xs3.append((n + 1, 20, b))
-        x -= r
-        b += r
-        #print(n, r, x, b)
+for i in range(m - 1, -1, -1):
+    c = 1 << i
+    if L - b >= c:
+        xs.append((i + 1, m + 1, b))
+        b += c
 
-for i in range(m):
-    xs2.append((i + 1, i + 2, 2**i))
-
-xs = xs1 + xs2 + xs3
-
-print(20, len(xs))
+print(m + 1, len(xs))
 
 for x in xs:
     print(*x)
