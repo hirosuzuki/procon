@@ -15,12 +15,22 @@ func calc_bin(n int) (result int) {
 	return
 }
 
-func min(a, b int) int {
-	if a > b {
-		return b
-	} else {
-		return a
+func arrayMap(xs []int, f func(int) int) []int {
+	result := make([]int, len(xs))
+	for i := 0; i < len(xs); i++ {
+		result[i] = f(xs[i])
 	}
+	return result
+}
+
+func min(xs []int) int {
+	result := xs[0]
+	for _, r := range xs[1:] {
+		if r < result {
+			result = r
+		}
+	}
+	return result
 }
 
 func main() {
@@ -30,9 +40,7 @@ func main() {
 	for i := 0; i < n; i++ {
 		fmt.Scan(&a[i])
 	}
-	result := 100000000000000000
-	for _, x := range a {
-		result = min(result, calc_bin(x))
-	}
+	b := arrayMap(a, calc_bin)
+	result := min(b)
 	fmt.Print(result)
 }

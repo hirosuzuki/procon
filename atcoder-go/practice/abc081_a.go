@@ -7,7 +7,7 @@ import (
 
 func main() {
 	var s string
-	fmt.Scanf("%s\n", &s)
+	fmt.Scan(&s)
 	result := strings.Count(s, "1")
-	fmt.Printf("%d\n", result)
+	fmt.Print(result)
 }
