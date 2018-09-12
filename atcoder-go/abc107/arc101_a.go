@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strconv"
 )
 
 func abs(a int) int {
@@ -18,13 +21,21 @@ func min(a, b int) int {
 	return a
 }
 
+func loadints(n int) []int {
+	xs := make([]int, n)
+	sc := bufio.NewScanner(os.Stdin)
+	sc.Split(bufio.ScanWords)
+	for i := 0; i < n; i++ {
+		sc.Scan()
+		xs[i], _ = strconv.Atoi(sc.Text())
+	}
+	return xs
+}
+
 func main() {
 	var n, k int
 	fmt.Scan(&n, &k)
-	x := make([]int, n)
-	for i := 0; i < n; i++ {
-		fmt.Scan(&x[i])
-	}
+	x := loadints(n)
 	result := 100000000000
 	for i := 0; i < n-k+1; i++ {
 		d := x[i+k-1] - x[i]
