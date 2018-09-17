@@ -8,20 +8,30 @@ import (
 	"strconv"
 )
 
+var sc *bufio.Scanner
+
+func init() {
+	sc = bufio.NewScanner(os.Stdin)
+	sc.Split(bufio.ScanWords)
+}
+
+func loadint() (result int) {
+	sc.Scan()
+	result, _ = strconv.Atoi(sc.Text())
+	return
+}
+
 func loadints(n int) []int {
 	xs := make([]int, n)
-	sc := bufio.NewScanner(os.Stdin)
-	sc.Split(bufio.ScanWords)
 	for i := 0; i < n; i++ {
-		sc.Scan()
-		xs[i], _ = strconv.Atoi(sc.Text())
+		xs[i] = loadint()
 	}
 	return xs
 }
 
 func main() {
-	var n, x int
-	fmt.Scan(&n, &x)
+	n := loadint()
+	x := loadint()
 	a := loadints(n)
 	sort.Ints(a)
 	result := 0
