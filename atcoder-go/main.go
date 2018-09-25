@@ -11,6 +11,9 @@ var sc *bufio.Scanner
 
 func init() {
 	sc = bufio.NewScanner(os.Stdin)
+	buffsize := 1000000
+	buff := make([]byte, buffsize)
+	sc.Buffer(buff, buffsize)
 	sc.Split(bufio.ScanWords)
 }
 
@@ -18,6 +21,11 @@ func loadint() (result int) {
 	sc.Scan()
 	result, _ = strconv.Atoi(sc.Text())
 	return
+}
+
+func loadstr() string {
+	sc.Scan()
+	return sc.Text()
 }
 
 func loadints(n int) []int {
