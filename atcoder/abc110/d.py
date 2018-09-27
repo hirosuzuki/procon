@@ -2,45 +2,38 @@ N, M = [int(_) for _ in input().split()]
 
 MOD = 10**9+7
 
-def primes(n):
+def factorize(n):
     from math import sqrt
-    mn = int(sqrt(n)) + 2
-    p = [1] * mn
-    for x in range(2, mn):
-        if p[x]:
-            y = x * x
-            while y < mn:
-                p[y] = 0
-                y += x
-    return (i for i in range(2, mn) if p[i])
-
-def calc(M):
+    m = int(sqrt(n)) + 1
+    p = [True] * m
     result = {}
-    for n in primes(M):
-        if M % n == 0:
-            result[n] = 1
-            M //= n
-        while M % n == 0:
-            result[n] += 1
-            M //= n
-    if M > 1:
-        result[M] = 1
+    for x in range(2, m):
+        if p[x]:
+            p[x * 2::x] = [False] * ((m - 1) // x - 1)
+            i = 0
+            while 1:
+                d, q = divmod(n, x)
+                if q == 0:
+                    n = d
+                    i += 1
+                    result[x] = i
+                else:
+                    break
+    if n > 1:
+        result[n] = 1
     return result
 
 def C(x, y):
-    n = min(y, x - y)
     r = 1
-    for i in range(n):
-        r = r * (x - i)
-    for i in range(n):
-        r = r // (i + 1)
-    return r
-
-cs = calc(M)
+    s = 1
+    for i in range(y):
+        r *= (x - i)
+        s *= (i + 1)
+    return (r // s) % MOD
 
 result = 1
 
-for x in cs.values():
-    result = result * C(N+x-1, N-1) % MOD
+for x in factorize(M).values():
+    result = result * C(N + x - 1, x) % MOD
 
 print(result)

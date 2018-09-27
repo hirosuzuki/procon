@@ -1,32 +1,14 @@
 S = input()
 T = input()
 
+def normalize(s):
+    pos = {}
+    for i, c in enumerate(s):
+        if not c in pos:
+            pos[c] = i
+        yield pos[c]
 
-chars = "abcdefghijklmnopqrstuvwxyz"
-
-sp = {}
-tp = {}
-
-result = True
-
-for i in range(len(S)):
-    sc = S[i]
-    sx = i
-    tc = T[i]
-    tx = i
-    if not sc in sp:
-        sp[sc] = i
-    else:
-        sx = sp[sc]
-    if not tc in tp:
-        tp[tc] = i
-    else:
-        tx = tp[tc]
-    if sx != tx:
-        result = False
-        break
-
-if result:
+if all(x == y for x, y in zip(normalize(S), normalize(T))):
     print("Yes")
 else:
     print("No")
