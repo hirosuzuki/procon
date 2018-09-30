@@ -15,6 +15,9 @@ if mc[0] > 0 and mc[1] > 0:
     print(-1)
     sys.exit()
 
+if maxl > 20:
+    raise
+
 print(maxl)
 print(*([1]*maxl))
 
@@ -30,10 +33,5 @@ for x, y in XY:
         w += "U" * (+y)
     a = (maxl - len(w)) // 2
     if a > 0:
-        if x == 0:
-            w = "R"*a + w + "L"*a
-        elif y < 0:
-            w = "U"*a + w + "D"*a
-        else:
-            w = "D"*a + w + "U"*a
+        w = "R"*a + w + "L"*a
     print(w)

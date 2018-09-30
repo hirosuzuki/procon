@@ -1,8 +1,5 @@
-n = int(input())
+N = int(input())
 
-while 1:
-    if n % 111 == 0:
-        break
-    n += 1
+result = (N + 110) // 111 * 111
 
-print(n)
+print(result)

@@ -1,5 +1,5 @@
-S = input()
+N = int(input())
 
-S = S.replace("1", "x").replace("9", "1").replace("x", "9")
+result = 1110 - N
 
-print(S)
+print(result)
