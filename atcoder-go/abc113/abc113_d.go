@@ -27,13 +27,23 @@ func main() {
 		patterns = patternsNext
 	}
 
+	pnums := make([][]int, w)
+	for i := 0; i < w; i++ {
+		pnums[i] = make([]int, w)
+	}
+	for _, pattern := range patterns {
+		for i, p := range pattern {
+			pnums[i][p]++
+		}
+	}
+
 	nums := make([]int, w)
 	nums[0] = 1
 	for i := 0; i < h; i++ {
 		numsNext := make([]int, w)
-		for _, pattern := range patterns {
-			for i, n := range pattern {
-				numsNext[i] = (numsNext[i] + nums[n]) % 1000000007
+		for i, pnum := range pnums {
+			for j, p := range pnum {
+				numsNext[i] = (numsNext[i] + nums[j]*p) % 1000000007
 			}
 		}
 		nums = numsNext
