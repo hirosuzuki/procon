@@ -1,26 +1,18 @@
 N = int(input())
 
-nums = [3, 5, 7]
-
 def iter_nums():
-    xs = nums
-    base = 10
+    xs = "357"
     while 1:
         for x in xs:
             yield x
-        xs = [n * base + x for n in nums for x in xs]
-        base *= 10
+        xs = [n + x for n in "357" for x in xs]
 
-def calc(N):
-    result = 0
-    for n in iter_nums():
-        if n > N:
-            break
-        s = str(n)
-        if "3" in s and "5" in s and "7" in s:
-            result += 1
-    return result
-
-result = calc(N)
+result = 0
+for s in iter_nums():
+    n = int(s)
+    if n > N:
+        break
+    if "3" in s and "5" in s and "7" in s:
+        result += 1
 
 print(result)
