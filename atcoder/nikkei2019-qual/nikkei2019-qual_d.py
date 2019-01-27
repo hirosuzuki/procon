@@ -1,43 +1,50 @@
 N, M = [int(_) for _ in input().split()]
 AB = [[int(_) for _ in input().split()] for i in range(N - 1 + M)]
 
+import sys
+sys.setrecursionlimit(200000)
+
 from collections import defaultdict
-from heapq import *
 
 vs = defaultdict(set)
-ws = defaultdict(int)
+ws = defaultdict(set)
 
 for a, b in AB:
     vs[a].add(b)
-    ws[b] += 1
-
-for i in range(1, N + 1):
-    if not ws[i]:
-        root = i
-        break
-
-h = []
-
-heappush(h, (0, root, 0))
-
-rs = [-1] * (N + 1) 
-ls = [0] * (N + 1)
-
-rs[root] = 0
+    ws[b].add(a)
 
 #print(vs)
+#print(ws)
 
-while h:
-    l, n, parent = heappop(h)
-    #print("*", l, n, parent)
-    for m in vs[n]:
-        if ls[m] > l - 1:
-            #print("+", l -1, m, n)
-            ls[m] = l - 1
-            prer = rs[m]
-            if prer != n:
-                rs[m] = n
-                heappush(h, (l - 1, m, n))
+L = []
 
-for i in range(1, N + 1):
-    print(rs[i])
+cs = [0] * (1 + N)
+
+def visit(n):
+    if cs[n] == 1:
+        return
+    elif cs[n] == 0:
+        cs[n] = 1
+        for m in vs[n]:
+            visit(m)
+        cs[n] = 2
+        L.append(n)
+
+for n in range(1, N + 1):
+    if cs[n] == 0:
+        visit(n)
+
+#print(L)
+
+nrank = {}
+
+for r, n in enumerate(L):
+    nrank[n] = r
+
+#print(nrank)
+
+for n in range(1, N + 1):
+    r = 0
+    if ws[n]:
+        r = sorted(ws[n], key=lambda x:nrank[x])[0]
+    print(r)
