@@ -122,3 +122,25 @@ class BIT:
         while n <= self.size:
             self.xs[n] += x
             n += n & -n
+
+
+def TopologicalSort(nodes, edges, rev_edges):
+    '''
+    nodes     ... Node[]
+    edges     ... Dict[From Node](To Node)
+    rev_edges ... Dict[To Node](From Node)
+    '''
+    rev_edges_num = dict((n, len(rev_edges[n])) for n in nodes)
+    L = []
+    S = [n for n in nodes if not rev_edges_num[n]]
+    while S:
+        n = S.pop()
+        L.append(n)
+        for m in edges[n]:
+            rev_edges_num[m] -= 1
+            if not rev_edges_num[m]:
+                S.append(m)
+    
+    # プロコン用なのでエラーチェックはしない
+
+    return L
