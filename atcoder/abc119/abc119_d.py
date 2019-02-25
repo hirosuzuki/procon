@@ -3,40 +3,23 @@ S = [int(input()) for i in range(A)]
 T = [int(input()) for i in range(B)]
 Q = [int(input()) for i in range(Q)]
 
-#print(S, T, Q)
-
-def calc_m(xs):
-    return [(a + b) / 2 for a, b in zip(xs, xs[1:])]
-
-sm = calc_m(S)
-tm = calc_m(T)
-
-#print(sm)
-#print(tm)
-
 import bisect
 
-def calc_nearest_0(xs, y, ym):
-    result = []
-    i = 0
-    for x in xs:
-        while i < len(ym) and x >= ym[i]:
-            i += 1
-        result.append(y[i])
-    return result
-
-def calc_nearest(xs, y, ym):
+def calc_nearest_distance(xs, ys):
     result = []
     for x in xs:
-        i = bisect.bisect(ym, x)
-        result.append(y[i])
+        i = bisect.bisect(ys, x)
+        if i == 0:
+            d = abs(ys[i] - x)
+        elif i < len(ys):
+            d = min(abs(ys[i - 1] - x), abs(ys[i] - x))
+        else:
+            d = abs(ys[i - 1] - x)
+        result.append(d)
     return result
 
-sn = calc_nearest(S, T, tm)
-tn = calc_nearest(T, S, sm)
-
-#print(sn)
-#print(tn)
+sn = calc_nearest_distance(S, T)
+tn = calc_nearest_distance(T, S)
 
 def solve(q, S, T, sn, tn):
     nsp = bisect.bisect(S, q)
@@ -45,18 +28,15 @@ def solve(q, S, T, sn, tn):
     rs = []
 
     if 0 <= nsp < len(S):
-        rs.append(abs(S[nsp] - q) + abs(S[nsp] - sn[nsp]))
-    nsp -= 1
-    if 0 <= nsp < len(S):
-        rs.append(abs(S[nsp] - q) + abs(S[nsp] - sn[nsp]))
+        rs.append(abs(S[nsp] - q) + sn[nsp])
+    if 0 <= nsp - 1 < len(S):
+        rs.append(abs(S[nsp - 1] - q) + sn[nsp - 1])
 
     if 0 <= ntp < len(T):
-        rs.append(abs(T[ntp] - q) + abs(T[ntp] - tn[ntp]))
-    ntp -= 1
-    if 0 <= ntp < len(T):
-        rs.append(abs(T[ntp] - q) + abs(T[ntp] - tn[ntp]))
+        rs.append(abs(T[ntp] - q) + tn[ntp])
+    if 0 <= ntp - 1 < len(T):
+        rs.append(abs(T[ntp - 1] - q) + tn[ntp - 1])
 
-    # print("Q", q, S, T, sn, tn, r1, r2)
     return min(rs)
 
 for q in Q:
