@@ -4,22 +4,43 @@ D = [int(input()) for i in range(Q)]
 
 from bisect import *
 
-result = {}
-
-STX = sorted(STX, key=lambda x:x[2])
-ds = D[:]
+es = []
 
 for s, t, x in STX:
     t1 = s - .5 - x
     t2 = t - .5 - x
-    p1 = bisect_left(ds, t1)
-    p2 = bisect_left(ds, t2)
-    #print(p1, p2, t1, t2, ds[p1:p2])
-    for d in ds[p1:p2]:
-        result[d] = x
-    ds = ds[:p1] + ds[p2:]
-
-#print(result)
+    #print(t1, t2, x)
+    es.append((t1, 1, x))
+    es.append((t2, 0, x))
 
 for d in D:
-    print(result.get(d, -1))
+    es.append((d, 3, 0))
+
+es.sort()
+
+class MinGetSet:
+    def __init__(self):
+        self.values = set()
+        self.min = None
+    def getMin(self):
+        if self.min is None:
+            self.min = min(self.values) if self.values else None
+        return self.min
+    def add(self, v):
+        self.values.add(v)
+        if self.min is None or v < self.min:
+            self.min = v
+    def remove(self, v):
+        self.values.remove(v)
+        if self.min == v:
+            self.min = None
+
+s = MinGetSet()
+
+for t, typ, x in es:
+    if typ == 3:
+        print(s.getMin() or -1)
+    elif typ == 1:
+        s.add(x)
+    elif typ == 0:
+        s.remove(x)
