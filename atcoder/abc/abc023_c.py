@@ -17,6 +17,8 @@ def solve_small():
                 result += 1
     return result
 
+from collections import defaultdict
+
 def solve():
     rs = [0] * (R + 1)
     cs = [0] * (C + 1)
@@ -25,6 +27,21 @@ def solve():
         rs[r] += 1
         cs[c] += 1
 
-    return
+    csc = defaultdict(int)
+    for i in range(1, C + 1):
+        csc[cs[i]] += 1
 
-print(solve_small())
+    result = 0
+    for i in range(1, R + 1):
+        result += csc[K - rs[i]]
+
+    for r, c in RC:
+        x = rs[r] + cs[c]
+        if x == K:
+            result -= 1
+        if x == K + 1:
+            result += 1
+
+    return result
+
+print(solve())
